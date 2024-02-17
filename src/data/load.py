@@ -49,7 +49,6 @@ def load(train_size=.8):
 
     X = train_data.drop('target', axis=1)
     y = train_data['target']
-    X, y = X[::2], y[::2]  # subsample for faster demo
     wandb.errors.term._show_warnings = False
     # ignore warnings about charts being built from subset of data
 
