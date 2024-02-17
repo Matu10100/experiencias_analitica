@@ -25,6 +25,7 @@ def load(train_size=.8):
     """
     # Load the data
     """
+    from sklearn import datasets
     housing = datasets.fetch_california_housing()
     
     # Convertir los datos y las características en un DataFrame de pandas
