@@ -77,6 +77,10 @@ def load_and_log():
             metadata={"source": "sklearn.datasets.fetch_california_housing",
                       "sizes": [len(dataset) for dataset in datasets]})
 
+        for name, data in zip(names, datasets):
+            # 🐣 Store a new file in the artifact, and write something into its contents.
+            with raw_data.new_file(name + ".csv", mode="w") as csvfile:
+
         # ✍️ Save the artifact to W&B.
         run.log_artifact(raw_data)
 
