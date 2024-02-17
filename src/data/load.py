@@ -80,7 +80,9 @@ def load_and_log():
         for name, data in zip(names, datasets):
             # 🐣 Store a new file in the artifact, and write something into its contents.
             with raw_data.new_file(name + ".csv", mode="w") as csvfile:
-
+                csv_content = data.to_csv(index=False)
+                artifact.add(csv_content, name=f"{name}.csv")
+                
         # ✍️ Save the artifact to W&B.
         run.log_artifact(raw_data)
 
