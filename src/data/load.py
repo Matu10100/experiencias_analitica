@@ -78,11 +78,11 @@ def load_and_log():
                       "sizes": [len(dataset) for dataset in datasets]})
 
         for name, data in zip(names, datasets):
-            # 🐣 Store a new file in the artifact, and write something into its contents.
-            with raw_data.new_file(name + ".csv", mode="w") as csvfile:
-                csv_content = data.to_csv(index=False)
-                raw_data.add(csv_content, name=f"{name}.csv")
-                
+            # Convert dataframe to wandb Table
+            data_table = wandb.Table(data=data.values, columns=list(data.columns))
+            # Add table to the artifact
+            raw_data.add(data_table, name=f"{name}")
+            
         # ✍️ Save the artifact to W&B.
         run.log_artifact(raw_data)
 
