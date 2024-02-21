@@ -49,6 +49,12 @@ def preprocess_and_log(steps):
  
         # 📥 if need be, download the artifact
         raw_dataset = raw_data_artifact.download(root="./data/artifacts/")
+
+       # Create the directory for processed data if it doesn't exist
+        processed_data = "processed_data"
+        if not os.path.exists(processed_data):
+            os.makedirs(processed_data)
+         
         for split in ["training.table", "validation.table", "test.table"]:
             raw_split = read(raw_dataset, split)
             processed_dataset = preprocess(raw_split, **steps)
