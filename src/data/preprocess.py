@@ -64,12 +64,12 @@ def read(data_dir, split):
     data = table.to_dataframe()
     return data
  
-''''
+'''
 table = read(data_dir, split)
 for ndx, row in table.iterrows():
     # Process each row as needed
     print(ndx, row)
-'''' 
+'''
 steps = {"normalize": True}
 df_names = ['training', 'validation', 'test']
 #columns = ['MedInc','HouseAge','AveRooms','AveBedrms','Population','AveOccup','Latitude','Longitude','target'] 
