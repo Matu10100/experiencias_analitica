@@ -58,19 +58,13 @@ def preprocess_and_log(steps):
         run.log_artifact(processed_data)
  
 def read(data_dir, split):
-    raw_data_artifact = run.use_artifact('Housing-Raw:latest')
+    run = wandb.init()
+    artifact = run.use_artifact('Housing-Raw:latest')
     filename = split + ".json"
-    file_path = os.path.join(data_dir, filename)
-    table = raw_data_artifact.get(filename)
+    table = artifact.get(filename)
     data = table.to_dataframe()
     return data
  
-'''
-table = read(data_dir, split)
-for ndx, row in table.iterrows():
-    # Process each row as needed
-    print(ndx, row)
-'''
 steps = {"normalize": True}
 df_names = ['training', 'validation', 'test']
 #columns = ['MedInc','HouseAge','AveRooms','AveBedrms','Population','AveOccup','Latitude','Longitude','target'] 
