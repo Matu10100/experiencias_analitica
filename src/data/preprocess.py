@@ -60,11 +60,17 @@ def preprocess_and_log(steps):
 def read(data_dir, split):
     filename = split + ".json"
     file_path = os.path.join(data_dir, filename)
-    table = wandb.Table(file_path)
+    table = wandb.Table(data=wandb.load(file_path))
     data = table.to_dataframe()
     return data
  
+''''
+table = read(data_dir, split)
+for ndx, row in table.iterrows():
+    # Process each row as needed
+    print(ndx, row)
+'''' 
 steps = {"normalize": True}
 df_names = ['training', 'validation', 'test']
- 
+#columns = ['MedInc','HouseAge','AveRooms','AveBedrms','Population','AveOccup','Latitude','Longitude','target'] 
 preprocess_and_log(steps)
