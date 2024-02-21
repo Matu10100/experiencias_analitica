@@ -50,10 +50,10 @@ def preprocess_and_log(steps):
             processed_dataset = preprocess(raw_split, **steps)
  
             # Convert DataFrame to JSON and save
-            processed_data_json_path = f"./{split}.json"
+            processed_data_json_path = f"./{split}"
             processed_dataset.to_json(processed_data_json_path, orient="records")
             # Log JSON file as an artifact
-            processed_data.add_file(processed_data_json_path, name=f"{split}.json")
+            processed_data.add_file(processed_data_json_path, name=f"{split}")
  
         run.log_artifact(processed_data)
  
