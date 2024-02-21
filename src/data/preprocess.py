@@ -50,21 +50,17 @@ def preprocess_and_log(steps):
         # 📥 if need be, download the artifact
         raw_dataset = raw_data_artifact.download(root="./data/artifacts/")
 
-       # Create the directory for processed data if it doesn't exist
-        processed_data = "processed_data"
-        if not os.path.exists(processed_data):
-            os.makedirs(processed_data)
          
         for split in ["training.table", "validation.table", "test.table"]:
             raw_split = read(raw_dataset, split)
             processed_dataset = preprocess(raw_split, **steps)
  
             # Convert DataFrame to JSON and save
-            processed_data_json_path = os.path.join("processed_data", f"{split}.json")
+            processed_data_json_path = f"./{split}.json"
             processed_dataset.to_json(processed_data_json_path, orient="records")
             # Log JSON file as an artifact
-            processed_data.add_file(processed_data_json_path, name=f"{split}.json")
- 
+            processed_data.add_file(processed_data_json_path, name=f"{split}.table")
+
         run.log_artifact(processed_data)
  
 def read(data_dir, split):
