@@ -35,7 +35,11 @@ def preprocess(dataset, normalize=True):
  
 def preprocess_and_log(steps):
  
-    with wandb.init(project="maestria_datos",name=f"Preprocess Data ExecId-{args.IdExecution}", job_type="preprocess-data") as run:    
+    with wandb.init(
+        project="maestria_datos",
+        name=f"Preprocess Data ExecId-{args.IdExecution}", job_type="preprocess-data") as run:    
+
+        # 🏺 create our Artifact 
         processed_data = wandb.Artifact(
             "Housing-preprocess", type="dataset",
             description="Preprocessed California Housing dataset",
@@ -50,7 +54,7 @@ def preprocess_and_log(steps):
             processed_dataset = preprocess(raw_split, **steps)
  
             # Convert DataFrame to JSON and save
-            processed_data_json_path = f"./{split}"
+            processed_data_json_path = os.path.join("processed_data", f"{split}.json")
             processed_dataset.to_json(processed_data_json_path, orient="records")
             # Log JSON file as an artifact
             processed_data.add_file(processed_data_json_path, name=f"{split}.json")
