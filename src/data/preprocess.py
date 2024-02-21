@@ -62,7 +62,7 @@ def read(data_dir, split):
     artifact = run.use_artifact('Housing-Raw:latest')
     filename = split + ".json"
     table = artifact.get(filename)
-    data = table.to_dataframe()
+    data = table.get_dataframe()
     return data
  
 steps = {"normalize": True}
