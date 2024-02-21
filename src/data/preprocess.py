@@ -60,7 +60,7 @@ def preprocess_and_log(steps):
 def read(data_dir, split):
     filename = split + ".json"
     file_path = os.path.join(data_dir, filename)
-    table = wandb.Table.from_dataframe(file_path)
+    table = wandb.Table(file_path)
     data = table.to_dataframe()
     return data
  
