@@ -58,6 +58,7 @@ def preprocess_and_log(steps):
         run.log_artifact(processed_data)
  
 def read(data_dir, split):
+    raw_data_artifact = run.use_artifact('Housing-Raw:latest')
     filename = split + ".json"
     file_path = os.path.join(data_dir, filename)
     table = raw_data_artifact.get(filename)
