@@ -35,11 +35,7 @@ def preprocess(dataset, normalize=True):
  
 def preprocess_and_log(steps):
  
-    with wandb.init(
-        project="maestria_datos",
-        name=f"Preprocess Data ExecId-{args.IdExecution}", job_type="preprocess-data") as run:    
-
-        # 🏺 create our Artifact 
+    with wandb.init(project="maestria_datos",name=f"Preprocess Data ExecId-{args.IdExecution}", job_type="preprocess-data") as run:    
         processed_data = wandb.Artifact(
             "Housing-preprocess", type="dataset",
             description="Preprocessed California Housing dataset",
@@ -49,18 +45,14 @@ def preprocess_and_log(steps):
  
         # 📥 if need be, download the artifact
         raw_dataset = raw_data_artifact.download(root="./data/artifacts/")
-
-         
-        for split in ["training.table", "validation.table", "test.table"]:
+        for split, name in zip(["training.table", "validation.table", "test.table"], df_names):
             raw_split = read(raw_dataset, split)
             processed_dataset = preprocess(raw_split, **steps)
- 
-            # Convert DataFrame to JSON and save
-            processed_data_json_path = f"./{split}.json"
-            processed_dataset.to_json(processed_data_json_path, orient="records")
-            # Log JSON file as an artifact
-            processed_data.add_file(processed_data_json_path, name=f"{split}.table")
 
+            preprocessed_data = wandb.Table(data=processed_dataset.values, columns=list(processed_dataset.columns))
+            # Add table to the artifact
+            processed_data.add(preprocessed_data, name=f"{name}")
+ 
         run.log_artifact(processed_data)
  
 def read(data_dir, split):
@@ -73,5 +65,5 @@ def read(data_dir, split):
  
 steps = {"normalize": True}
 df_names = ['training', 'validation', 'test']
-#columns = ['MedInc','HouseAge','AveRooms','AveBedrms','Population','AveOccup','Latitude','Longitude','target'] 
+
 preprocess_and_log(steps)
