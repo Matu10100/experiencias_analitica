@@ -56,7 +56,7 @@ def train_and_log(config,experiment_id='99'):
         data = run.use_artifact('Housing-preprocess:latest')
         data_dir = data.download()
 
-        training_set =  read(data, "training")
+        training_set =  read(data_dir, "training")
         #validation_dataset = read(data_dir, "validation")
 
         trained_model = train(training_set)
@@ -83,7 +83,7 @@ def evaluate_and_log(model, experiment_id='99'):
 
         data = run.use_artifact('Housing-preprocess:latest')
         data_dir = data.download()
-        testing_set = read(data, "test")
+        testing_set = read(data_dir, "test")
 
         # Evaluate the model
         r2, MSE, y_pred = evaluate(testing_set, model)
