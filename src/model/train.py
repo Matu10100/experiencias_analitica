@@ -3,12 +3,10 @@ import argparse
 import wandb
 import warnings
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pickle
 
-from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import Ridge
 from sklearn import datasets
 from sklearn import metrics
@@ -101,4 +99,4 @@ evaluate_and_log(trained_model)
 
 model = train_and_log(train_config)
 evaluate_and_log()
-"""
+
