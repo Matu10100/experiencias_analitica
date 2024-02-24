@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import pickle
 
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import LinearRegression
 from sklearn import datasets
 from sklearn import metrics
 from sklearn.exceptions import ConvergenceWarning
@@ -33,7 +33,7 @@ def train(dataset):
     X_train = dataset.drop('target', axis=1)
     y_train = dataset['target']
     # Train model, get predictions
-    reg = Ridge()
+    reg = LinearRegression()
     model = reg.fit(X_train, y_train)
     return model
 
