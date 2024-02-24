@@ -22,10 +22,9 @@ if args.IdExecution:
 else:
     args.IdExecution = "testing console"
 
-def read(data_dir, split):
+def read(data_dir, filename):
     run = wandb.init()
     artifact = run.use_artifact('Housing-preprocess:latest')
-    filename = split + ".json"
     table = artifact.get(filename)
     data = table.get_dataframe()
     return data
@@ -54,9 +53,9 @@ def train_and_log(config,experiment_id='99'):
         job_type="train-model", config=config) as run:
         config = wandb.config
         data = run.use_artifact('Housing-preprocess:latest')
-        data_dir = data.download()
+        data_dir = data.download(root="./data/artifacts/")
 
-        training_set =  read(data_dir, "training")
+        training_set =  read(data_dir, "training.table.json")
         #validation_dataset = read(data_dir, "validation")
 
         trained_model = train(training_set)
@@ -82,8 +81,8 @@ def evaluate_and_log(model, experiment_id='99'):
         job_type="eval-model") as run:
 
         data = run.use_artifact('Housing-preprocess:latest')
-        data_dir = data.download()
-        testing_set = read(data_dir, "test")
+        data_dir = data.download(root="./data/artifacts/")
+        testing_set = read(data_dir, "test.table.json")
 
         # Evaluate the model
         r2, MSE, y_pred = evaluate(testing_set, model)
