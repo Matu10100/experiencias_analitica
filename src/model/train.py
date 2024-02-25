@@ -29,11 +29,11 @@ def read(data_dir, filename):
     data = table.get_dataframe()
     return data
 
-def train(dataset):
+def train(config, dataset):
     X_train = dataset.drop('target', axis=1)
     y_train = dataset['target']
     # Train model, get predictions
-    reg = LinearRegression()
+    reg = LinearRegression(config)
     model = reg.fit(X_train, y_train)
     return model
 
@@ -46,7 +46,7 @@ def evaluate(dataset, model):
     MSE = metrics.mean_squared_error(y_test, y_pred)
     return r2, MSE, y_pred
 
-def train_and_log(experiment_id='99'):
+def train_and_log(config, experiment_id='99'):
     with wandb.init(
         project="maestria_datos", 
         name=f"Train Model ExecId-{args.IdExecution} ExperimentId-{experiment_id}", 
@@ -57,8 +57,8 @@ def train_and_log(experiment_id='99'):
 
         training_set =  read(data_dir, "training.table.json")
         #validation_dataset = read(data_dir, "validation")
-
-        trained_model = train(training_set)
+        
+        trained_model = train(config, training_set)
 
          # Save and log the trained model
         model_filename = "trained_model.pkl"
@@ -90,7 +90,10 @@ def evaluate_and_log(model, experiment_id='99'):
     return r2, MSE, y_pred
 
 # Main script
-# Train the model and get the trained model object
-trained_model = train_and_log()
-# Evaluate the trained model and log evaluation metrics
-evaluate_and_log(trained_model)
+parameters = ['True','False']
+for id,parameter in enumerate(parameters):
+    # Train the model and get the trained model object
+    config = {"positive" : parameter}
+    trained_model = train_and_log(config)
+    # Evaluate the trained model and log evaluation metrics
+    evaluate_and_log(trained_model)
