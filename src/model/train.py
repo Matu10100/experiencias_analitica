@@ -63,9 +63,8 @@ def train_and_log(config, experiment_id='99'):
          # Save and log the trained model
             # Contador para agregar un número secuencial al nombre del archivo
     contador = 1
-    
     # Bucle para guardar varios modelos con nombres diferentes
-    for trained_model in lista_de_trained_models:
+    for trained_model in range(contador):
         # Nombre del archivo con un número secuencial
         model_filename = f"trained_model_{contador}.pkl"
         with open(model_filename, 'wb') as model_file:
