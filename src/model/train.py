@@ -5,7 +5,7 @@ import warnings
 
 import numpy as np
 import pandas as pd
-import joblib
+import pickle
 
 from sklearn.linear_model import LinearRegression
 from sklearn import datasets
@@ -61,9 +61,17 @@ def train_and_log(config, experiment_id='99'):
         trained_model = train(config=config, dataset=training_set)
 
          # Save and log the trained model
-        model_filename = "trained_model.job"
+            # Contador para agregar un número secuencial al nombre del archivo
+    contador = 1
+    
+    # Bucle para guardar varios modelos con nombres diferentes
+    for trained_model in lista_de_trained_models:
+        # Nombre del archivo con un número secuencial
+        model_filename = f"trained_model_{contador}.pkl"
         with open(model_filename, 'wb') as model_file:
-            joblib.dump(trained_model, model_file)
+            pickle.dump(trained_model, model_file)
+        # Incrementar el contador para el siguiente modelo
+        contador += 1
 
         model_artifact = wandb.Artifact(
             "trained-model", type="model",
