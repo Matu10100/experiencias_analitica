@@ -66,7 +66,7 @@ def train_and_log(config, experiment_id='99'):
  
         model_artifact = wandb.Artifact(
             "trained-model", type="model",
-            description="Trained Linear Regression model")
+            description="Trained Linear model")
         model_artifact.add_file(model_filename)
         run.log_artifact(model_artifact)
  
@@ -90,7 +90,9 @@ def evaluate_and_log(model, experiment_id='99'):
 parameters = ['True','False']
 for id,parameter in enumerate(parameters):
     # Train the model and get the trained model object
-    config = {"positive" : parameter}
+    config = {"positive" : parameter,
+             "fit_intercept": parameter,
+             }
     trained_model = train_and_log(config,id)
     # Evaluate the trained model and log evaluation metrics
     evaluate_and_log(trained_model)
