@@ -46,11 +46,11 @@ def evaluate(dataset, model):
     MSE = metrics.mean_squared_error(y_test, y_pred)
     return r2, MSE, y_pred
 
-def train_and_log(config,experiment_id='99'):
+def train_and_log(experiment_id='99'):
     with wandb.init(
         project="maestria_datos", 
         name=f"Train Model ExecId-{args.IdExecution} ExperimentId-{experiment_id}", 
-        job_type="train-model", config=config) as run:
+        job_type="train-model") as run:
         config = wandb.config
         data = run.use_artifact('Housing-preprocess:latest')
         data_dir = data.download(root="./data/artifacts/")
@@ -73,7 +73,6 @@ def train_and_log(config,experiment_id='99'):
 
     return trained_model
 
- 
 def evaluate_and_log(model, experiment_id='99'):
     
     with wandb.init(
@@ -92,10 +91,6 @@ def evaluate_and_log(model, experiment_id='99'):
 
 # Main script
 # Train the model and get the trained model object
-trained_model = train_and_log(config={})
+trained_model = train_and_log()
 # Evaluate the trained model and log evaluation metrics
 evaluate_and_log(trained_model)
-
-model = train_and_log(train_config)
-evaluate_and_log()
-
