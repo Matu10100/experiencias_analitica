@@ -66,7 +66,7 @@ def train_and_log(config, experiment_id='99'):
  
         model_artifact = wandb.Artifact(
             "trained-model", type="model",
-            description="Trained Ridge model")
+            description="Trained Linear Regression model")
         model_artifact.add_file(model_filename)
         run.log_artifact(model_artifact)
  
