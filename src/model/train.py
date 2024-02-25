@@ -35,6 +35,7 @@ def train(config, dataset):
     # Train model, get predictions
     reg = LinearRegression(**config)
     model = reg.fit(X_train, y_train)
+    wandb.sklearn.plot_residuals(model, X_train, y_train)
     return model
  
 def evaluate(dataset, model):
@@ -53,10 +54,10 @@ def train_and_log(config, experiment_id='99'):
         job_type="train-model") as run:
         config = wandb.config
         data = run.use_artifact('Housing-preprocess:latest')
-        data_dir = data.download(root="./data/artifacts/")
- 
+        model_config = data.metadata
+        config.update(model_config)
+        data_dir = data.download(root="./data/artifacts/")      
         training_set =  read(data_dir, "training.table.json")
-        #validation_dataset = read(data_dir, "validation")
         trained_model = train(config=config, dataset=training_set)
  
          # Save and log the trained model
@@ -66,7 +67,7 @@ def train_and_log(config, experiment_id='99'):
  
         model_artifact = wandb.Artifact(
             "trained-model", type="model",
-            description="Trained Linear model")
+            description="Trained LinearRegression model")
         model_artifact.add_file(model_filename)
         run.log_artifact(model_artifact)
  
@@ -79,6 +80,7 @@ def evaluate_and_log(model, experiment_id='99'):
  
         data = run.use_artifact('Housing-preprocess:latest')
         data_dir = data.download(root="./data/artifacts/")
+        training_set =  read(data_dir, "training.table.json")
         testing_set = read(data_dir, "test.table.json")
  
         # Evaluate the model
@@ -86,13 +88,22 @@ def evaluate_and_log(model, experiment_id='99'):
         wandb.log({"Test R^2": r2, "Test MSE": MSE})
     return r2, MSE, y_pred
  
+def read_raw(data_dir, filename):
+    run = wandb.init()
+    artifact = run.use_artifact('Housing-Raw:latest')
+    table = artifact.get(filename)
+    data = table.get_dataframe()
+    return data
+ 
 # Main script
 parameters = ['True','False']
+ 
 for id,parameter in enumerate(parameters):
     # Train the model and get the trained model object
-    config = {"positive" : parameter,
+    model_config = {"positive" : parameter,
              "fit_intercept": parameter,
+             #"solver": 'lsqr'
              }
-    trained_model = train_and_log(config,id)
+    trained_model = train_and_log(model_config,id)
     # Evaluate the trained model and log evaluation metrics
     evaluate_and_log(trained_model)
