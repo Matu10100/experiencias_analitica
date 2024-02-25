@@ -93,4 +93,4 @@ for id,parameter in enumerate(parameters):
     config = {"positive" : parameter}
     trained_model = train_and_log(config,id)
     # Evaluate the trained model and log evaluation metrics
-    evaluate_and_log(id)
+    evaluate_and_log(trained_model)
