@@ -5,7 +5,7 @@ import warnings
 
 import numpy as np
 import pandas as pd
-import pickle
+import joblib
 
 from sklearn.linear_model import LinearRegression
 from sklearn import datasets
@@ -61,13 +61,13 @@ def train_and_log(config, experiment_id='99'):
         trained_model = train(config=config, dataset=training_set)
 
          # Save and log the trained model
-        model_filename = "trained_model.pkl"
+        model_filename = "trained_model.job"
         with open(model_filename, 'wb') as model_file:
-            pickle.dump(trained_model, model_file)
+            joblib.dump(trained_model, model_file)
 
         model_artifact = wandb.Artifact(
             "trained-model", type="model",
-            description="Trained Ridge model")
+            description="Trained Linear Regression model")
         model_artifact.add_file(model_filename)
         run.log_artifact(model_artifact)
 
