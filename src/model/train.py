@@ -58,7 +58,7 @@ def train_and_log(config, experiment_id='99'):
         training_set =  read(data_dir, "training.table.json")
         #validation_dataset = read(data_dir, "validation")
         
-        trained_model = train(config, training_set)
+        trained_model = train(config=config, dataset=training_set)
 
          # Save and log the trained model
         model_filename = "trained_model.pkl"
